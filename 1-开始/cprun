@@ -1,0 +1,38 @@
+#!/bin/bash
+
+# Check if the script argument is provided or if -h is requested
+if [ "$1" == "-h" ]; then
+  echo "Usage: grun <cpp_script> [< infile]"
+  echo "grun is a utility to compile and run C++ scripts."
+  echo
+  echo "Arguments:"
+  echo "  <cpp_script>    Path to the C++ source file to compile."
+  echo "  <infile>        (Optional) Input file for the C++ program."
+  echo
+  echo "Example:"
+  echo "  grun program.cpp input.txt  # Compile and run program.cpp with input from input.txt."
+  echo "  grun program.cpp            # Compile and run program.cpp without any input file."
+  exit 0
+fi
+
+# Check if the C++ script argument is provided
+if [ -z "$1" ]; then
+  echo "Usage: grun <cpp_script> [< infile]"
+  exit 1
+fi
+
+# Compile the C++ script
+g++ -o output "$1"
+if [ $? -ne 0 ]; then
+  echo "Compilation failed."
+  exit 1
+fi
+
+# Run the compiled program
+if [ -z "$2" ]; then
+  # No input file specified
+  ./output
+else
+  # Input file provided
+  ./output < "$2"
+fi
